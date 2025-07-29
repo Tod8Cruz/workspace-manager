@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Clock, DollarSign, TrendingUp, Plus, Timer } from "lucide-react"
 import { mockEmployees, mockTimeLogs } from "@/app/page"
 import { TimeLogForm } from "@/components/time-log-form"
+import { formatDate } from "@/lib/utils"
 
 interface PartTimeDashboardProps {
   employeeId: number
@@ -116,11 +117,11 @@ export function PartTimeDashboard({ employeeId }: PartTimeDashboardProps) {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <div className="text-muted-foreground">Contract Start</div>
-                <div className="font-medium">{new Date(employee.contractDate).toLocaleDateString()}</div>
+                <div className="font-medium">{formatDate(employee.contractDate)}</div>
               </div>
               <div>
                 <div className="text-muted-foreground">Contract End</div>
-                <div className="font-medium">{new Date(employee.contractEndDate).toLocaleDateString()}</div>
+                <div className="font-medium">{formatDate(employee.contractEndDate)}</div>
               </div>
             </div>
 
@@ -270,7 +271,7 @@ export function PartTimeDashboard({ employeeId }: PartTimeDashboardProps) {
                   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                   .slice(0, 10)
                   .map((log) => {
-                    const logDate = new Date(log.date).toLocaleDateString()
+                    const logDate = formatDate(log.date)
                     const earnings = log.hours * employee.hourlyRate
 
                     return (

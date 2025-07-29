@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, X } from "lucide-react"
 import { mockProjectNotifications } from "@/app/page"
+import { formatDate } from "@/lib/utils"
 
 export function NotificationButton() {
   const [showNotifications, setShowNotifications] = useState(false)
@@ -107,7 +108,7 @@ export function NotificationButton() {
                         </div>
                         <div className="text-sm">{notification.message}</div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          {new Date(notification.date).toLocaleDateString()} • Project notification
+                          {formatDate(notification.date)} • Project notification
                         </div>
                       </div>
                       {!notification.read && <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>}

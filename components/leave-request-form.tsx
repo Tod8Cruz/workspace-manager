@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { X, Calendar, AlertCircle } from "lucide-react"
 import { mockEmployees, calculateLeaveBalance, mockLeaveRequests } from "@/app/page"
+import { formatDate } from "@/lib/utils"
 
 interface LeaveRequestFormProps {
   onClose: () => void
@@ -107,13 +108,13 @@ export function LeaveRequestForm({ onClose, employeeId, preselectedDate }: Leave
             {balance.isExpired && (
               <div className="flex items-center gap-1 mt-2 text-xs text-destructive">
                 <AlertCircle className="w-3 h-3" />
-                <span>Leave has expired (Contract ended: {balance.contractEndDate.toLocaleDateString()})</span>
+                <span>Leave has expired (Contract ended: {formatDate(balance.contractEndDate)})</span>
               </div>
             )}
 
             {balance.hasExtension && (
               <div className="flex items-center gap-1 mt-2 text-xs text-green-600">
-                <span>Extended until: {balance.effectiveEndDate.toLocaleDateString()}</span>
+                <span>Extended until: {formatDate(balance.effectiveEndDate)}</span>
               </div>
             )}
           </div>

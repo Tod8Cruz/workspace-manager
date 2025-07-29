@@ -18,6 +18,7 @@ import { LeaveExtensionForm } from "@/components/leave-extension-form"
 import { ExpenseDetailModal } from "@/components/expense-detail-modal"
 import { LeaveCalendar } from "@/components/leave-calendar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { formatDate } from "@/lib/utils"
 
 export function AdminDashboard() {
   const [leaveRequests, setLeaveRequests] = useState(mockLeaveRequests)
@@ -177,8 +178,8 @@ export function AdminDashboard() {
                 <TableBody>
                   {leaveRequests.map((request) => {
                     const employee = mockEmployees.find((emp) => emp.id === request.employeeId)
-                    const startDate = new Date(request.startDate).toLocaleDateString()
-                    const endDate = new Date(request.endDate).toLocaleDateString()
+                                          const startDate = formatDate(request.startDate)
+                      const endDate = formatDate(request.endDate)
 
                     return (
                       <TableRow key={request.id}>
@@ -341,7 +342,7 @@ export function AdminDashboard() {
                     <TableCell className="max-w-xs">
                       <div className="text-sm truncate">{request.reason}</div>
                     </TableCell>
-                    <TableCell>{new Date(request.effectiveDate).toLocaleDateString()}</TableCell>
+                                            <TableCell>{formatDate(request.effectiveDate)}</TableCell>
                     <TableCell>
                       <Badge
                         variant={
@@ -443,7 +444,7 @@ export function AdminDashboard() {
                     <TableCell className="max-w-xs">
                       <div className="truncate">{claim.description}</div>
                     </TableCell>
-                    <TableCell>{new Date(claim.date).toLocaleDateString()}</TableCell>
+                                            <TableCell>{formatDate(claim.date)}</TableCell>
                     <TableCell>
                       <Badge
                         variant={

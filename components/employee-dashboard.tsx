@@ -21,6 +21,7 @@ import { ExpenseClaimForm } from "@/components/expense-claim-form"
 import { LeaveRequestForm } from "@/components/leave-request-form"
 import { NotificationButton } from "@/components/notification-button"
 import { LeaveCalendar } from "@/components/leave-calendar"
+import { formatDate } from "@/lib/utils"
 
 interface EmployeeDashboardProps {
   employeeId: number
@@ -127,7 +128,7 @@ export function EmployeeDashboard({ employeeId }: EmployeeDashboardProps) {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <div className="text-muted-foreground">Contract Date</div>
-                <div className="font-medium">{new Date(employee.contractDate).toLocaleDateString()}</div>
+                <div className="font-medium">{formatDate(employee.contractDate)}</div>
               </div>
               <div>
                 <div className="text-muted-foreground">Months Employed</div>
@@ -236,7 +237,7 @@ export function EmployeeDashboard({ employeeId }: EmployeeDashboardProps) {
               {balance.hasExtension && (
                 <div className="flex justify-between text-sm">
                   <span>Leave Extended Until:</span>
-                  <span className="text-green-600 font-medium">{balance.effectiveEndDate.toLocaleDateString()}</span>
+                  <span className="text-green-600 font-medium">{formatDate(balance.effectiveEndDate)}</span>
                 </div>
               )}
 
@@ -302,7 +303,7 @@ export function EmployeeDashboard({ employeeId }: EmployeeDashboardProps) {
                         {request.status}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
-                        {new Date(request.requestDate).toLocaleDateString()}
+                        {formatDate(request.requestDate)}
                       </span>
                     </div>
                     <div className="text-sm space-y-1">
@@ -320,7 +321,7 @@ export function EmployeeDashboard({ employeeId }: EmployeeDashboardProps) {
                         <strong>Reason:</strong> {request.reason}
                       </div>
                       <div>
-                        <strong>Effective:</strong> {new Date(request.effectiveDate).toLocaleDateString()}
+                        <strong>Effective:</strong> {formatDate(request.effectiveDate)}
                       </div>
                     </div>
                   </div>
@@ -375,7 +376,7 @@ export function EmployeeDashboard({ employeeId }: EmployeeDashboardProps) {
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {new Date(claim.requestDate).toLocaleDateString()}
+                        {formatDate(claim.requestDate)}
                       </span>
                     </div>
                     <div className="text-sm space-y-1">
@@ -446,9 +447,9 @@ export function EmployeeDashboard({ employeeId }: EmployeeDashboardProps) {
                   </TableHeader>
                   <TableBody>
                     {employeeRequests.map((request) => {
-                      const startDate = new Date(request.startDate).toLocaleDateString()
-                      const endDate = new Date(request.endDate).toLocaleDateString()
-                      const requestDate = new Date(request.requestDate).toLocaleDateString()
+                      const startDate = formatDate(request.startDate)
+                      const endDate = formatDate(request.endDate)
+                      const requestDate = formatDate(request.requestDate)
 
                       return (
                         <TableRow key={request.id}>
