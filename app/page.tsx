@@ -9,6 +9,7 @@ import { AdminDashboard } from "@/components/admin-dashboard"
 import { LeaveRequestForm } from "@/components/leave-request-form"
 import { EmployeeManagement } from "@/components/employee-management"
 import { PartTimeDashboard } from "@/components/part-time-dashboard"
+import { EmployerManagement } from "@/components/employer-management"
 
 // Update mockEmployees to include bank account numbers
 export const mockEmployees = [
@@ -628,11 +629,12 @@ export default function WorkSpacePage() {
 
         {/* Main Content */}
         <Tabs defaultValue="employee" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="employee">My Dashboard</TabsTrigger>
             <TabsTrigger value="parttimer">My Dashboard (Part Timer)</TabsTrigger>
             <TabsTrigger value="admin">Admin Dashboard</TabsTrigger>
             <TabsTrigger value="employees">Employee Management</TabsTrigger>
+            <TabsTrigger value="employers">Employer Management</TabsTrigger>
           </TabsList>
 
           <TabsContent value="employee" className="space-y-6">
@@ -649,6 +651,10 @@ export default function WorkSpacePage() {
 
           <TabsContent value="employees" className="space-y-6">
             <EmployeeManagement />
+          </TabsContent>
+
+          <TabsContent value="employers" className="space-y-6">
+            <EmployerManagement />
           </TabsContent>
         </Tabs>
 
