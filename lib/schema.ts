@@ -1,5 +1,18 @@
 import { pgTable, serial, text, varchar, timestamp, boolean, integer, date, decimal } from 'drizzle-orm/pg-core';
 
+// Users table for authentication
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  password: varchar('password', { length: 255 }).notNull(),
+  role: varchar('role', { length: 20 }).notNull().default('member'), // 'manager' or 'member'
+  firstName: varchar('first_name', { length: 100 }).notNull(),
+  lastName: varchar('last_name', { length: 100 }).notNull(),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // Employers table
 export const employers = pgTable('employers', {
   id: serial('id').primaryKey(),
@@ -97,6 +110,8 @@ export const notifications = pgTable('notifications', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 export type Employer = typeof employers.$inferSelect;
 export type NewEmployer = typeof employers.$inferInsert;
 export type Employee = typeof employees.$inferSelect;

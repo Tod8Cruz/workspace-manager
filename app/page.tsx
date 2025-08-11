@@ -1,15 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, Users, Clock, DollarSign } from "lucide-react"
+import { Calendar, Users, Clock, DollarSign, LogOut } from "lucide-react"
 import { EmployeeDashboard } from "@/components/employee-dashboard"
 import { AdminDashboard } from "@/components/admin-dashboard"
 import { LeaveRequestForm } from "@/components/leave-request-form"
 import { EmployeeManagement } from "@/components/employee-management"
 import { PartTimeDashboard } from "@/components/part-time-dashboard"
 import { EmployerManagement } from "@/components/employer-management"
+import { Button } from "@/components/ui/button"
 
 // Update mockEmployees to include bank account numbers
 export const mockEmployees = [
@@ -557,8 +560,30 @@ export function calculateLeaveBalance(
 }
 
 export default function WorkSpacePage() {
-  const [currentUser] = useState("admin") // In real app, get from auth
+  const router = useRouter()
+  const { user, loading, isAuthenticated, signOut } = useAuth()
   const [showLeaveForm, setShowLeaveForm] = useState(false)
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push("/auth")
+    }
+  }, [isAuthenticated, loading, router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
 
   const totalEmployees = mockEmployees.length
   const pendingRequests = mockLeaveRequests.filter((req) => req.status === "pending").length
@@ -575,9 +600,13 @@ export default function WorkSpacePage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">WorkSpace Manager</h1>
             <p className="text-gray-600 mt-1">
-              Comprehensive employee management, leave tracking, and project coordination
+              Welcome, {user?.firstName} {user?.lastName} ({user?.role})
             </p>
           </div>
+          <Button onClick={signOut} variant="outline" className="flex items-center gap-2">
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
         </div>
 
         {/* Stats Cards */}
@@ -628,13 +657,17 @@ export default function WorkSpacePage() {
         </div>
 
         {/* Main Content */}
-        <Tabs defaultValue="employee" className="space-y-6">
+        <Tabs defaultValue={user?.role === 'manager' ? 'admin' : 'employee'} className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="employee">My Dashboard</TabsTrigger>
             <TabsTrigger value="parttimer">My Dashboard (Part Timer)</TabsTrigger>
-            <TabsTrigger value="admin">Admin Dashboard</TabsTrigger>
-            <TabsTrigger value="employees">Employee Management</TabsTrigger>
-            <TabsTrigger value="employers">Employer Management</TabsTrigger>
+            {user?.role === 'manager' && (
+              <>
+                <TabsTrigger value="admin">Admin Dashboard</TabsTrigger>
+                <TabsTrigger value="employees">Employee Management</TabsTrigger>
+                <TabsTrigger value="employers">Employer Management</TabsTrigger>
+              </>
+            )}
           </TabsList>
 
           <TabsContent value="employee" className="space-y-6">
@@ -645,17 +678,21 @@ export default function WorkSpacePage() {
             <PartTimeDashboard employeeId={9} />
           </TabsContent>
 
-          <TabsContent value="admin" className="space-y-6">
-            <AdminDashboard />
-          </TabsContent>
+          {user?.role === 'manager' && (
+            <>
+              <TabsContent value="admin" className="space-y-6">
+                <AdminDashboard />
+              </TabsContent>
 
-          <TabsContent value="employees" className="space-y-6">
-            <EmployeeManagement />
-          </TabsContent>
+              <TabsContent value="employees" className="space-y-6">
+                <EmployeeManagement />
+              </TabsContent>
 
-          <TabsContent value="employers" className="space-y-6">
-            <EmployerManagement />
-          </TabsContent>
+              <TabsContent value="employers" className="space-y-6">
+                <EmployerManagement />
+              </TabsContent>
+            </>
+          )}
         </Tabs>
 
         {/* Leave Request Form Modal */}
